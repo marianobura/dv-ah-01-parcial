@@ -12,21 +12,21 @@ mongoose.connect('mongodb://127.0.0.1:27017/app');
 const db = mongoose.connection;
 
 db.on('error', () => console.error('Error'));
-db.once('open', ()=>{
+db.once('open', () => {
     console.log('Conexión correcta');
 })
 
 const app = express();
 // Ruta Raíz
-app.use( express.json());
+app.use(express.json());
 
 //Definimos la carpeta para servir archivos estaticos
-app.use( express.static('public'));
+app.use(express.static('public'));
 
-app.use(  (req, res, next) => {
+app.use((req, res, next) => {
     console.log('Soy el middleware');
     next();
-}) 
+})
 
 app.get('/', (req, res) => {
     res.status(200).send('<h1> API REST </h1>');
@@ -35,6 +35,6 @@ app.get('/', (req, res) => {
 // Llamamos a las rutas
 routerAPI(app);
 
-app.listen( port, () => { 
+app.listen(port, () => {
     console.log(`Servidor en el puerto ${port}`)
 });
