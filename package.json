@@ -4,7 +4,6 @@
   "description": "Parcial #1 - Aplicaciones Híbridas",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
     "start": "nodemon index.js"
   },
   "author": "",
@@ -19,6 +18,7 @@
   },
   "devDependencies": {
     "autoprefixer": "^10.4.20",
-    "postcss": "^8.4.47"
+    "postcss": "^8.4.47",
+    "tailwindcss": "^3.4.13"
   }
 }
