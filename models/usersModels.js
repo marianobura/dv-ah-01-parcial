@@ -22,3 +22,8 @@ const userSchema = new Schema({
 const User = mongoose.model('User', userSchema);
 // Exporto el model
 module.exports = User;
+
+// {
+//     "username": "",
+//     "password": ""
+// }

@@ -9,25 +9,23 @@ dotenv.config();
 const secretKey = process.env.SECRETKEY;
 const salt = 10;
 
-
 const createUser = async (req, res) => {
     const { username, password } = req.body;
 
     if (!username || !password) {
-        res.status(400).json({ msg: 'Faltan paramatros obligatorios', data: { username, password } })
+        res.status(400).json({ msg: 'Faltan paramátros obligatorios', data: { username, password } })
     }
 
     const passwordHash = await bcrypt.hash(password, salt);
-
 
     try {
         // Creo una instancia del modelo
         const newUser = new User({ username, password: passwordHash })
         await newUser.save();
-        res.status(200).json({ msg: 'Usuario Creado', data: newUser })
+        res.status(200).json({ msg: 'Usuario creado', data: newUser })
     } catch (error) {
         console.error(error);
-        res.status(500).json({ msg: 'UPs tenemos un error :(', data: {} })
+        res.status(500).json({ msg: 'Hubo un error en el servidor', data: {} })
     }
 
 }
@@ -59,7 +57,7 @@ const login = async (req, res) => {
 
     } catch (error) {
         console.error(error);
-        res.status(500).json({ msg: 'UPs tenemos un error :(', data: {} })
+        res.status(500).json({ msg: 'Hubo un error en el servidor', data: {} })
     }
 }
 
@@ -77,12 +75,12 @@ const getUsersById = async (req, res) => {
         if (user) {
             res.status(200).json({ msg: "success", data: user });
         } else {
-            res.status(404).json({ msg: "No se encontro el usuario ", data: {} });
+            res.status(404).json({ msg: "No se encontró el usuario ", data: {} });
 
         }
     } catch (error) {
         console.error(error);
-        res.status(500).json({ msg: 'UPs tenemos un error :(', data: {} })
+        res.status(500).json({ msg: 'Hubo un error en el servidor', data: {} })
     }
 }
 
@@ -93,12 +91,12 @@ const deleteUserById = async (req, res) => {
         if (user) {
             res.status(200).json({ msg: "success", data: user });
         } else {
-            res.status(404).json({ msg: "No se encontro el usuario ", data: {} });
+            res.status(404).json({ msg: "No se encontró el usuario ", data: {} });
 
         }
     } catch (error) {
         console.error(error);
-        res.status(500).json({ msg: 'UPs tenemos un error :(', data: {} })
+        res.status(500).json({ msg: 'Hubo un error en el servidor', data: {} })
     }
 }
 const updateUserById = async (req, res) => {
@@ -110,12 +108,12 @@ const updateUserById = async (req, res) => {
         if (user) {
             res.status(200).json({ msg: "success", data: user });
         } else {
-            res.status(404).json({ msg: "No se encontro el usuario ", data: {} });
+            res.status(404).json({ msg: "No se encontró el usuario ", data: {} });
 
         }
     } catch (error) {
         console.error(error);
-        res.status(500).json({ msg: 'UPs tenemos un error :(', data: {} })
+        res.status(500).json({ msg: 'Hubo un error en el servidor', data: {} })
     }
 }
 

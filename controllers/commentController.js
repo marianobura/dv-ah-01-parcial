@@ -21,7 +21,7 @@ const createComment = async (req, res) => {
         res.status(200).json({ msg: "Comentario creado", data: newComment });
     } catch (error) {
         console.error(error);
-        res.status(500).json({ msg: "UPs tenemos un error :(", data: {} });
+        res.status(500).json({ msg: "Hubo un error en el servidor", data: {} });
     }
 };
 
@@ -37,11 +37,11 @@ const getCommentsByUserId = async (req, res) => {
         if (user) {
             res.status(200).json({ msg: "success", data: user });
         } else {
-            res.status(404).json({ msg: "No se encontro el usuario ", data: {} });
+            res.status(404).json({ msg: "No se encontró el usuario ", data: {} });
         }
     } catch (error) {
         console.error(error);
-        res.status(500).json({ msg: "UPs tenemos un error :(", data: {} });
+        res.status(500).json({ msg: "Hubo un error en el servidor", data: {} });
     }
 };
 
@@ -52,11 +52,11 @@ const deleteCommentById = async (req, res) => {
         if (comment) {
             res.status(200).json({ msg: "success", data: comment });
         } else {
-            res.status(404).json({ msg: "No se encontro el usuario ", data: {} });
+            res.status(404).json({ msg: "No se encontró el usuario ", data: {} });
         }
     } catch (error) {
         console.error(error);
-        res.status(500).json({ msg: "UPs tenemos un error :(", data: {} });
+        res.status(500).json({ msg: "Hubo un error en el servidor", data: {} });
     }
 };
 const updateCommentById = async (req, res) => {
@@ -76,7 +76,7 @@ const updateCommentById = async (req, res) => {
         }
     } catch (error) {
         console.error(error);
-        res.status(500).json({ msg: "UPs tenemos un error :(", data: {} });
+        res.status(500).json({ msg: "Hubo un error en el servidor", data: {} });
     }
 };
 

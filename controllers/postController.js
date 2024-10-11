@@ -1,47 +1,60 @@
 const Post = require('../models/postsModels');
 const User = require('../models/usersModels');
 
-
 const createPost = async (req, res) => {
-    const { title, userId } = req.body;
+    const { title, body, tags, reactions, views, userId } = req.body;
 
-    if (!title || !userId) {
-        res.status(400).json({ msg: 'Faltan paramatros obligatorios', data: { title, userId } })
+    if (!title || !body || !userId) {
+        return res.status(400).json({ msg: 'Faltan paramatros obligatorios', data: { title, body, userId } })
     }
 
     try {
-        const user = await User.findById(userId)
+        const user = await User.findById(userId);
+        if (!user) {
+            return res.status(404).json({ msg: 'Usuario no encontrado' });
+        }
 
-        const newPost = new Post({ title, user: user._id })
+        const newPost = new Post({ title, body, tags, reactions, views, user: user._id });
         await newPost.save();
         res.status(200).json({ msg: 'Post creado', data: newPost })
     } catch (error) {
         console.error(error);
-        res.status(500).json({ msg: 'UPs tenemos un error :(', data: {} })
+        res.status(500).json({ msg: 'Hubo un error en el servidor', data: {} })
     }
-
 }
-
 
 const getPosts = async (req, res) => {
     const posts = await Post.find().populate('user')
     res.status(200).json({ msg: 'Ok', data: posts });
 }
 
-
 const getPostsByUserId = async (req, res) => {
-    const { id } = req.params;
+    const { userId } = req.params;
     try {
-        const user = await User.findById(id);
-        if (user) {
-            res.status(200).json({ msg: "success", data: user });
+        const posts = await Post.find({ user: userId }).populate('user');
+        if (posts.length > 0) {
+            res.status(200).json({ msg: "success", data: posts });
         } else {
-            res.status(404).json({ msg: "No se encontro el usuario ", data: {} });
-
+            res.status(404).json({ msg: "No se encontró el ningún post para ese usuario ", data: {} });
         }
     } catch (error) {
         console.error(error);
-        res.status(500).json({ msg: 'UPs tenemos un error :(', data: {} })
+        res.status(500).json({ msg: 'Hubo un error en el servidor', data: {} })
+    }
+}
+
+const getPostById = async (req, res) => {
+    const { id } = req.params;
+    try {
+        const post = await Post.findById(id).populate('user');
+        if (post) {
+            res.status(200).json({ msg: "success", data: post });
+        } else {
+            res.status(404).json({ msg: "No se encontró el post ", data: {} });
+        }
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ msg: 'Hubo un error en el servidor', data: {} })
     }
 }
 
@@ -52,30 +65,28 @@ const deletePostById = async (req, res) => {
         if (post) {
             res.status(200).json({ msg: "success", data: post });
         } else {
-            res.status(404).json({ msg: "No se encontro el usuario ", data: {} });
-
+            res.status(404).json({ msg: "No se encontró el post ", data: {} });
         }
     } catch (error) {
         console.error(error);
-        res.status(500).json({ msg: 'UPs tenemos un error :(', data: {} })
+        res.status(500).json({ msg: 'Hubo un error en el servidor', data: {} })
     }
 }
 const updatePostById = async (req, res) => {
     const { id } = req.params;
-    const { title } = req.body;
+    const { title, body, tags, reactions, views } = req.body;
 
     try {
-        const post = await Post.findByIdAndUpdate(id, { title }, { new: true });
+        const post = await Post.findByIdAndUpdate(id, { title, body, tags, reactions, views }, { new: true });
         if (post) {
             res.status(200).json({ msg: "success", data: post });
         } else {
-            res.status(404).json({ msg: "No se encontro el post ", data: {} });
-
+            res.status(404).json({ msg: "No se encontró el post ", data: {} });
         }
     } catch (error) {
         console.error(error);
-        res.status(500).json({ msg: 'UPs tenemos un error :(', data: {} })
+        res.status(500).json({ msg: 'Hubo un error en el servidor', data: {} })
     }
 }
 
-module.exports = { createPost, getPosts, getPostsByUserId, deletePostById, updatePostById };
+module.exports = { createPost, getPosts, getPostsByUserId, getPostById, deletePostById, updatePostById };
