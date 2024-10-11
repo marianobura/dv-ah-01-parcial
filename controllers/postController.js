@@ -5,7 +5,7 @@ const createPost = async (req, res) => {
     const { title, body, tags, reactions, views, userId } = req.body;
 
     if (!title || !body || !userId) {
-        return res.status(400).json({ msg: 'Faltan paramatros obligatorios', data: { title, body, userId } })
+        return res.status(400).json({ msg: 'Faltan parámetros obligatorios', data: { title, body, userId } });
     }
 
     try {
@@ -16,30 +16,43 @@ const createPost = async (req, res) => {
 
         const newPost = new Post({ title, body, tags, reactions, views, user: user._id });
         await newPost.save();
-        res.status(200).json({ msg: 'Post creado', data: newPost })
+        res.status(200).json({ msg: 'Post creado', data: newPost });
     } catch (error) {
         console.error(error);
-        res.status(500).json({ msg: 'Hubo un error en el servidor', data: {} })
+        res.status(500).json({ msg: 'Hubo un error en el servidor', data: {} });
     }
 }
 
 const getPosts = async (req, res) => {
-    const posts = await Post.find().populate('user')
-    res.status(200).json({ msg: 'Ok', data: posts });
+    const { sort } = req.query; 
+    try {
+        let postsQuery = Post.find().populate('user');
+
+        
+        if (sort === 'top') {
+            postsQuery = postsQuery.sort({ reactions: -1 });
+        }
+
+        const posts = await postsQuery;
+        res.status(200).json({ msg: 'Ok', data: posts });
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ msg: 'Hubo un error en el servidor', data: {} });
+    }
 }
 
 const getPostsByUserId = async (req, res) => {
     const { userId } = req.params;
     try {
-        const posts = await Post.find({ user: userId }).populate('user');
+        const posts = await Post.find({ user: userId }).populate('user').sort({ reactions: -1 });
         if (posts.length > 0) {
             res.status(200).json({ msg: "success", data: posts });
         } else {
-            res.status(404).json({ msg: "No se encontró el ningún post para ese usuario ", data: {} });
+            res.status(404).json({ msg: "No se encontró ningún post para ese usuario", data: {} });
         }
     } catch (error) {
         console.error(error);
-        res.status(500).json({ msg: 'Hubo un error en el servidor', data: {} })
+        res.status(500).json({ msg: 'Hubo un error en el servidor', data: {} });
     }
 }
 
@@ -50,11 +63,11 @@ const getPostById = async (req, res) => {
         if (post) {
             res.status(200).json({ msg: "success", data: post });
         } else {
-            res.status(404).json({ msg: "No se encontró el post ", data: {} });
+            res.status(404).json({ msg: "No se encontró el post", data: {} });
         }
     } catch (error) {
         console.error(error);
-        res.status(500).json({ msg: 'Hubo un error en el servidor', data: {} })
+        res.status(500).json({ msg: 'Hubo un error en el servidor', data: {} });
     }
 }
 
@@ -65,13 +78,14 @@ const deletePostById = async (req, res) => {
         if (post) {
             res.status(200).json({ msg: "success", data: post });
         } else {
-            res.status(404).json({ msg: "No se encontró el post ", data: {} });
+            res.status(404).json({ msg: "No se encontró el post", data: {} });
         }
     } catch (error) {
         console.error(error);
-        res.status(500).json({ msg: 'Hubo un error en el servidor', data: {} })
+        res.status(500).json({ msg: 'Hubo un error en el servidor', data: {} });
     }
 }
+
 const updatePostById = async (req, res) => {
     const { id } = req.params;
     const { title, body, tags, reactions, views } = req.body;
@@ -81,12 +95,21 @@ const updatePostById = async (req, res) => {
         if (post) {
             res.status(200).json({ msg: "success", data: post });
         } else {
-            res.status(404).json({ msg: "No se encontró el post ", data: {} });
+            res.status(404).json({ msg: "No se encontró el post", data: {} });
         }
     } catch (error) {
         console.error(error);
-        res.status(500).json({ msg: 'Hubo un error en el servidor', data: {} })
+        res.status(500).json({ msg: 'Hubo un error en el servidor', data: {} });
     }
 }
 
-module.exports = { createPost, getPosts, getPostsByUserId, getPostById, deletePostById, updatePostById };
+module.exports = { 
+    createPost, 
+    getPosts, 
+    getPostsByUserId, 
+    getPostById, 
+    deletePostById, 
+    updatePostById 
+};
+
+//http://127.0.0.1:3000/api/posts?sort=top con este URL puede ver los post con mas like en los primeros lugares 
