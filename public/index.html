@@ -79,7 +79,7 @@
                 <div class="border p-2 bg-blue-50">
                     <div class="flex items-center gap-1">
                         <div class="text-sm text-white font-semibold bg-blue-700 px-2 rounded-full w-fit">GET</div>
-                        <p class="font-medium">/api/posts/user/:id</p>
+                        <p class="font-medium">/api/posts/user/:userId</p>
                     </div>
                     <p>Obtiene un posteo de un usuario por su ID</p>
                 </div>
@@ -126,9 +126,16 @@
                 <div class="border p-2 bg-blue-50">
                     <div class="flex items-center gap-1">
                         <div class="text-sm text-white font-semibold bg-blue-700 px-2 rounded-full w-fit">GET</div>
+                        <p class="font-medium">/api/comments/user/:userId</p>
+                    </div>
+                    <p>Obtiene todos los comentarios de un usuario</p>
+                </div>
+                <div class="border p-2 bg-blue-50">
+                    <div class="flex items-center gap-1">
+                        <div class="text-sm text-white font-semibold bg-blue-700 px-2 rounded-full w-fit">GET</div>
                         <p class="font-medium">/api/comments/:id</p>
                     </div>
-                    <p>Obtiene un comentario por ID</p>
+                    <p>Obtiene todos los comentarios de un post</p>
                 </div>
                 <div class="border p-2 bg-red-50">
                     <div class="flex items-center gap-1">

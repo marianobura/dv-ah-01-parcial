@@ -3,20 +3,32 @@ const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 
 const commentSchema = new Schema({
-    description: String,
-    created: {
-        type: Date,
-        default: Date.now
+    body: {
+        type: String,
+        required: true
     },
-    completed: {
-        type: Boolean,
-        default: false
+    likes: {
+        type: Number,
+        default: 0
+    },
+    post: {
+        type: Schema.Types.ObjectId,
+        ref: 'Post',
+        required: true
     },
     user: {
         type: Schema.Types.ObjectId,
-        ref: 'User'
+        ref: 'User',
+        required: true
     }
 });
 
 const Comment = mongoose.model('Comment', commentSchema);
 module.exports = Comment;
+
+// {
+//     "body": "",
+//     "likes": ,
+//     "userId": "",
+//     "postId": ""
+// }
