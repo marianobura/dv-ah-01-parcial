@@ -31,58 +31,53 @@ const createUser = async (req, res) => {
 }
 
 const login = async (req, res) => {
-    try {
-        const { username, password } = req.body;
+    const { username, password } = req.body;
 
+    try {
         const user = await User.findOne({ username });
-        // Verificamos si el username existe
         if (!user) {
-            res.status(401).json({ msg: 'El username no existe', data: {} });
+            return res.status(401).json({ msg: 'El usuario no existe' });
         }
-        // Verificamos si el password es valido
+
         const passwordOk = await bcrypt.compare(password, user.password);
         if (!passwordOk) {
-            res.status(401).json({ msg: 'La contraseña es incorrecta', data: {} });
+            return res.status(401).json({ msg: 'Contraseña incorrecta' });
         }
-        // Si todo va bien, generamos el token
-        const data = {
-            userId: user._id,
-            username: user.username
-        }
-        const token = jwt.sign(data, secretKey, { expiresIn: '1h' });
 
-        console.log(token);
-        // Enviamos le token al cliente
-        res.status(200).json({ msg: 'success', data: { jwt: token } });
+        const token = jwt.sign({ userId: user._id, username: user.username }, secretKey, { expiresIn: '1h' });
 
+        res.status(200).json({ msg: 'Inicio de sesión exitoso', token });
     } catch (error) {
         console.error(error);
-        res.status(500).json({ msg: 'Hubo un error en el servidor', data: {} })
+        res.status(500).json({ msg: 'Error al iniciar sesión', error: error.message });
     }
-}
+};
 
 
 const getUsers = async (req, res) => {
-    const users = await User.find();
-    res.status(200).json({ msg: 'Ok', data: users });
-}
+    try {
+        const users = await User.find();
+        res.status(200).json({ msg: 'Usuarios obtenidos', data: users });
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ msg: 'Error al obtener usuarios', error: error.message });
+    }
+};
 
 
 const getUsersById = async (req, res) => {
     const { id } = req.params;
     try {
         const user = await User.findById(id);
-        if (user) {
-            res.status(200).json({ msg: "success", data: user });
-        } else {
-            res.status(404).json({ msg: "No se encontró el usuario ", data: {} });
-
+        if (!user) {
+            return res.status(404).json({ msg: 'Usuario no encontrado' });
         }
+        res.status(200).json({ msg: 'Usuario obtenido', data: user });
     } catch (error) {
         console.error(error);
-        res.status(500).json({ msg: 'Hubo un error en el servidor', data: {} })
+        res.status(500).json({ msg: 'Error al obtener el usuario', error: error.message });
     }
-}
+};
 
 const deleteUserById = async (req, res) => {
     const { id } = req.params;
