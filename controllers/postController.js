@@ -28,7 +28,6 @@ const getPosts = async (req, res) => {
     try {
         let postsQuery = Post.find().populate('user');
 
-        
         if (sort === 'top') {
             postsQuery = postsQuery.sort({ reactions: -1 });
         }
@@ -111,5 +110,3 @@ module.exports = {
     deletePostById, 
     updatePostById 
 };
-
-//http://127.0.0.1:3000/api/posts?sort=top con este URL puede ver los post con mas like en los primeros lugares 

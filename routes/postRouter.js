@@ -1,8 +1,6 @@
 const express = require('express');
 const router = express.Router();
-const { createPost, getPosts, getPostsByUserId, updatePostById, deletePostById, getPostById} = require('../controllers/postController');
-
-
+const { createPost, getPosts, getPostsByUserId, updatePostById, deletePostById, getPostById } = require('../controllers/postController');
 
 router.get('/', getPosts );
 router.post('/', createPost );
