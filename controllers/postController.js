@@ -28,8 +28,14 @@ const getPosts = async (req, res) => {
     try {
         let postsQuery = Post.find().populate('user');
 
+       
         if (sort === 'top') {
             postsQuery = postsQuery.sort({ reactions: -1 });
+        }
+
+       
+        if (sort === 'views') {
+            postsQuery = postsQuery.sort({ views: -1 });
         }
 
         const posts = await postsQuery;
@@ -43,7 +49,7 @@ const getPosts = async (req, res) => {
 const getPostsByUserId = async (req, res) => {
     const { userId } = req.params;
     try {
-        const posts = await Post.find({ user: userId }).populate('user').sort({ reactions: -1 });
+        const posts = await Post.find({ user: userId }).populate('user');
         if (posts.length > 0) {
             res.status(200).json({ msg: "success", data: posts });
         } else {
@@ -101,6 +107,7 @@ const updatePostById = async (req, res) => {
         res.status(500).json({ msg: 'Hubo un error en el servidor', data: {} });
     }
 }
+
 
 module.exports = { 
     createPost, 
