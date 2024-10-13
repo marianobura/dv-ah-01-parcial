@@ -1,6 +1,5 @@
 const express = require('express');
 const router = express.Router();
-/* ------------------------- Importo el Controlador ------------------------- */
 const { createComment, getComments, getCommentsByPostId, getCommentsByUserId, updateCommentById, deleteCommentById } = require('../controllers/commentController');
 
 router.get('/', getComments );

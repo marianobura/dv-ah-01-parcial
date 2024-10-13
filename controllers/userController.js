@@ -1,4 +1,3 @@
-/* ---------------------------- Importamos el modelo --------------------------- */
 const User = require('../models/usersModels');
 
 const jwt = require('jsonwebtoken');

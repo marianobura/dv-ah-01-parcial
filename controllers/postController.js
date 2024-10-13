@@ -76,6 +76,23 @@ const getPostById = async (req, res) => {
     }
 }
 
+const getPostsByName = async (req, res) => {
+    const { title } = req.params;
+
+    try {
+        const posts = await Post.find({ title: new RegExp(title, 'i') }).populate('user');
+
+        if (posts.length > 0) {
+            res.status(200).json({ msg: "success", data: posts });
+        } else {
+            res.status(404).json({ msg: "No se encontró ningún post con ese título", data: {} });
+        }
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ msg: 'Hubo un error en el servidor', data: {} });
+    }
+}
+
 const deletePostById = async (req, res) => {
     const { id } = req.params;
     try {
@@ -115,5 +132,6 @@ module.exports = {
     getPostsByUserId, 
     getPostById, 
     deletePostById, 
-    updatePostById 
+    updatePostById,
+    getPostsByName
 };
