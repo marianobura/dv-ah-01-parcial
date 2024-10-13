@@ -18,7 +18,6 @@ const createUser = async (req, res) => {
     const passwordHash = await bcrypt.hash(password, salt);
 
     try {
-        // Creo una instancia del modelo
         const newUser = new User({ username, password: passwordHash })
         await newUser.save();
         res.status(200).json({ msg: 'Usuario creado', data: newUser })
@@ -26,7 +25,6 @@ const createUser = async (req, res) => {
         console.error(error);
         res.status(500).json({ msg: 'Hubo un error en el servidor', data: {} })
     }
-
 }
 
 const login = async (req, res) => {
@@ -44,14 +42,13 @@ const login = async (req, res) => {
         }
 
         const token = jwt.sign({ userId: user._id, username: user.username }, secretKey, { expiresIn: '1h' });
-
         res.status(200).json({ msg: 'Inicio de sesión exitoso', token });
+
     } catch (error) {
         console.error(error);
         res.status(500).json({ msg: 'Error al iniciar sesión', error: error.message });
     }
 };
-
 
 const getUsers = async (req, res) => {
     try {
@@ -62,7 +59,6 @@ const getUsers = async (req, res) => {
         res.status(500).json({ msg: 'Error al obtener usuarios', error: error.message });
     }
 };
-
 
 const getUsersById = async (req, res) => {
     const { id } = req.params;
@@ -86,7 +82,6 @@ const deleteUserById = async (req, res) => {
             res.status(200).json({ msg: "success", data: user });
         } else {
             res.status(404).json({ msg: "No se encontró el usuario ", data: {} });
-
         }
     } catch (error) {
         console.error(error);
@@ -103,13 +98,11 @@ const updateUserById = async (req, res) => {
             res.status(200).json({ msg: "success", data: user });
         } else {
             res.status(404).json({ msg: "No se encontró el usuario ", data: {} });
-
         }
     } catch (error) {
         console.error(error);
         res.status(500).json({ msg: 'Hubo un error en el servidor', data: {} })
     }
 }
-
 
 module.exports = { createUser, getUsers, getUsersById, deleteUserById, updateUserById, login };

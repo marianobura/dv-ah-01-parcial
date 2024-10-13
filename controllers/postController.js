@@ -24,16 +24,14 @@ const createPost = async (req, res) => {
 }
 
 const getPosts = async (req, res) => {
-    const { sort } = req.query; 
+    const { sort } = req.query;
     try {
         let postsQuery = Post.find().populate('user');
 
-       
         if (sort === 'top') {
             postsQuery = postsQuery.sort({ reactions: -1 });
         }
 
-       
         if (sort === 'views') {
             postsQuery = postsQuery.sort({ views: -1 });
         }
@@ -125,13 +123,4 @@ const updatePostById = async (req, res) => {
     }
 }
 
-
-module.exports = { 
-    createPost, 
-    getPosts, 
-    getPostsByUserId, 
-    getPostById, 
-    deletePostById, 
-    updatePostById,
-    getPostsByName
-};
+module.exports = { createPost, getPosts, getPostsByUserId, getPostById, deletePostById, updatePostById, getPostsByName };
